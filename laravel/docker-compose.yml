@@ -1,0 +1,29 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: bijfluit-wijnen
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      # - /var/www/html/storage
+      # - /var/www/html/bootstrap/cache
+      - ./.docker/apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
+    working_dir: /var/www/html
+    user: "www-data"
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bijfluit-wijnen
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+volumes:
+  dbdata:
